@@ -1,0 +1,42 @@
+<div class="container mt-4">
+  <div *ngIf="updateSuccess">
+    <div class="alert alert-success">player update success</div>
+  </div>
+  <div *ngIf="updateSuccess==false">
+    <div class="alert alert-danger">player not update because the fields are empty </div>
+  </div>
+  <form #playerFormsControler="ngForm" (submit)="onUpdatePlayer(playerFormsControler)" >
+    <input name="id" hidden [(ngModel)]="player.id" >
+    <div class="mb-3 form-group">
+      <label for="playerName" class="form-label">PlayerName</label>
+      <input type="text" #playerName="ngModel" class="form-control" name="playerName" id="playerName" [(ngModel)]="player.playerName" required minlength="3" maxlength="20">
+      <div [ngStyle]="{'color':'red'}" *ngIf="!playerName?.valid && (playerName?.dirty || playerName?.touched) ">playerName is invalid</div>
+    </div>
+    <div class="mb-3 form-group">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" #email="ngModel" email class="form-control" name="email" id="email" [(ngModel)]="player.email" required maxlength="30">
+      <div [ngStyle]="{'color':'red'}" *ngIf="!email?.valid && (email?.dirty || email?.touched)">email is invalid</div>
+    </div>
+    <label for="email" class="form-label">Gender</label>
+    <div class="form-check form-group">
+      M<input class="form-check-input" value="M" type="radio" name="gender" [(ngModel)]="player.gender" id="gender">
+    </div>
+    <div class="form-check form-group">
+      F<input class="form-check-input" value="F" type="radio" name="gender" id="gender" [(ngModel)]="player.gender">
+    </div>
+    <label for="selected" class="form-label">Selected</label>
+    <div class="mb-3 form-check form-group">
+      <input type="checkbox" name="selected" class="form-check-input" id="selected" [(ngModel)]="player.selected">
+    </div>
+    <label for="email" class="form-label">Country</label>
+    <div class="form-group mb-3">
+      <select class="form-select" name="countryId" aria-label="Default select example" [(ngModel)]="player.countryId">
+        <option *ngFor="let c of countryList" [value]="c.id">{{c.countryName}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+
+  </form>
+</div>

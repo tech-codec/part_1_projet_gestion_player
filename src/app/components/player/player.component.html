@@ -1,0 +1,63 @@
+<p></p>
+<ul class="nav nav-pills mt-5 ml-5">
+  <li class="nav-item bclick pointeur">
+    <a class="nav-link active" data-bs-toggle="pill" (click)="onGetAllplayer()">ALL</a>
+  </li>
+  <li class="nav-item bclick pointeur">
+    <a class="nav-link" data-bs-toggle="pill" (click)="onGetAllPlayerSelected()">Selected</a>
+  </li>
+  <li class="nav-item bclick pointeur">
+    <a class="nav-link" data-bs-toggle="pill" (click)="onNewPlayer()">New</a>
+  </li>
+  <form class="d-flex m-lg-auto" #formControl="ngForm" (ngSubmit)="onSearch(formControl.value)">
+    <input class="form-control me-2"  type="search" name="keyword" ngModel placeholder="Search" aria-label="Search">
+    <button class="btn  btn-sm" type="submit">Search</button>
+  </form>
+</ul>
+
+<div class="container">
+  <ng-container *ngIf="(playerObservable$ | async) as state" [ngSwitch]="state.dataStateStatus">
+    <ng-container *ngSwitchCase="stateStatus.LOADING">
+      <button class="btn btn-primary" type="button" disabled>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+      </button>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="stateStatus.ERROR">
+      <div class="alert alert-danger" role="alert">
+        {{ state.dataStateError }}
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="stateStatus.LOADED">
+      <table class="table table-striped mt-2">
+        <thead>
+          <tr>
+            <th>ID</th><th>PlayerName</th><th>Email</th><th>Selected</th><th>Gender</th><th>Country</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of state.dataState">
+            <td>{{p.id}}</td>
+            <td>{{p.playerName}}</td>
+            <td>{{p.email}}</td>
+            <td ><i *ngIf="p.selected" class="fa fa-check-square-o text-success"></i></td>
+            <td>{{p.gender}}</td>
+            <td>{{p.countryName}}</td>
+            <td>
+              <button class="btn sm btn-success" [ngClass]="p.selected?'btn-success':'btn-danger'" (click)="onChangeStatus(p)"> {{p.selected? 'Selected': 'Unselected'}}</button>
+            </td>
+            <td>
+              <button class="btn sm btn-success m-2"><i class="fa fa-pencil" (click)="onEdite(p)"></i></button>
+              <button class="btn  sm btn-danger m-2" (click)="onDeletePlayer(p)"> <i class="fa fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+
+
+  </ng-container>
+
+</div>
